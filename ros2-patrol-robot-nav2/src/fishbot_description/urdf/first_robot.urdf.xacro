@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="first_robot">
+    <!-- 声明base模块 -->
+    <xacro:macro name="base_link" params="length radius">
+        <link name="base_link">
+        <!-- 部件外观描述 -->
+            <visual>
+                <!-- 沿自己几何中心的偏移与旋转量 -->
+                <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+                <!-- 几何形状 -->
+                <geometry>
+                    <!-- 圆柱形，半径为0.1m，高度为0.12m -->
+                    <cylinder length="${length}" radius="${radius}"/>
+                </geometry>
+                <!-- 材质子标签 白色 -->
+                <material name="white">
+                    <color rgba="1.0 1.0 1.0 0.5"/>
+                </material>
+            </visual>
+        </link>
+    </xacro:macro>
+    <!-- 声明IMU模块 -->
+    <xacro:macro name="imu_link" params="imu_name xyz">
+        <link name="${imu_name}_link">
+            <visual>
+                <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+                <geometry>
+                    <box size="0.02 0.02 0.02"/>
+                </geometry>    
+            </visual>
+            <material name="black">
+                <color rgba="0.0 0.0 0.0 0.5"/>
+            </material>
+        </link>
+        <joint name="${imu_name}_joint" type="fixed">
+            <!-- 父部件 -->
+            <parent link="base_link"/>
+            <child link="${imu_name}_link"/>
+            <!-- 子部件相对于父部件的平移和旋转 -->
+            <origin xyz="${xyz}"/>
+        </joint>
+    </xacro:macro>
+    
+    <!-- 传递参数调用 base_link模块 -->
+    <xacro:base_link length="0.12" radius="0.1"/>
+    <!-- 传递参数调用imu模块 -->
+    <xacro:imu_link imu_name="imu_up" xyz="0 0 0.02"/>
+    <xacro:imu_link imu_name="imu_down" xyz="0 0 -0.02"/>
+</robot>

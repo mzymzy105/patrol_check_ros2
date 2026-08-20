@@ -1,0 +1,21 @@
+<?xml version="1.0" ?>
+<sdf version="1.6">
+  <world name="default">
+    <include><uri>model://sun</uri></include>
+    <include><uri>model://ground_plane</uri></include>
+
+    <!-- 从用户地图挤出的墙 -->
+    <model name="map_walls">
+      <static>true</static>
+      <link name="walls">
+        <collision name="collision">
+          <geometry><mesh><uri>file:///home/hhl/Desktop/plan/ros2-patrol-robot-nav2/src/fishbot_description/world/map_walls.stl</uri></mesh></geometry>
+        </collision>
+        <visual name="visual">
+          <geometry><mesh><uri>file:///home/hhl/Desktop/plan/ros2-patrol-robot-nav2/src/fishbot_description/world/map_walls.stl</uri></mesh></geometry>
+          <material><ambient>0.8 0.8 0.8 1</ambient></material>
+        </visual>
+      </link>
+    </model>
+  </world>
+</sdf>

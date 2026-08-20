@@ -1,0 +1,30 @@
+# ===== 大文件 / 数据（避免仓库膨胀）=====
+# LiDAR 建图原始数据（数百 MB 点云，本地保留即可，不提交）
+20260804_211333/
+*.pcd
+*.ply
+
+# 日志文件
+*.log
+
+# 视频/演示文件
+*.webm
+
+# ===== Python =====
+__pycache__/
+*.pyc
+*.pyo
+
+# ===== ROS colcon 构建产物 =====
+build/
+install/
+log/
+
+# ===== 嵌套仓库（ros2-patrol-robot-nav2 只提交源码，不提交构建产物/生成物）=====
+ros2-patrol-robot-nav2/.git/
+ros2-patrol-robot-nav2/image_*.png
+
+# ===== IDE / 系统 =====
+.claude/
+.vscode/
+.DS_Store

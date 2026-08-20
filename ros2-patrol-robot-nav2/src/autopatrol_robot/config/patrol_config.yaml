@@ -1,0 +1,8 @@
+/patrol_node:
+  ros__parameters:
+    initial_point: [-19.9, 77.9, 0.0]
+    target_points: [
+        -35.0, 39.0, 0.0,
+        -19.9, 77.9, 0.0,
+        -45.3, 27.5, 0.0,
+        ]

@@ -1,0 +1,197 @@
+<?xml version="1.0" ?>
+<sdf version="1.5">
+  <model name="robot_sweeper">
+    <pose>0.0 0.0 0.0 0.0 0.0 0.0</pose>
+
+    <link name="base_footprint"/>
+
+    <!-- 圆形机身：直径 0.33m，高 0.09m -->
+    <link name="base_link">
+      <inertial>
+        <inertia>
+          <ixx>0.03</ixx><ixy>0</ixy><ixz>0</ixz>
+          <iyy>0.03</iyy><iyz>0</iyz>
+          <izz>0.04</izz>
+        </inertia>
+        <mass>3.0</mass>
+      </inertial>
+      <collision name="base_collision">
+        <geometry>
+          <cylinder><radius>0.165</radius><length>0.09</length></cylinder>
+        </geometry>
+      </collision>
+      <visual name="base_visual">
+        <geometry>
+          <cylinder><radius>0.165</radius><length>0.09</length></cylinder>
+        </geometry>
+        <material>
+          <ambient>0.9 0.9 0.9 1.0</ambient>
+          <diffuse>0.9 0.9 0.9 1.0</diffuse>
+        </material>
+      </visual>
+    </link>
+
+    <!-- 顶部激光雷达 -->
+    <link name="base_scan">
+      <inertial>
+        <inertia><ixx>0.001</ixx><ixy>0</ixy><ixz>0</ixz><iyy>0.001</iyy><iyz>0</iyz><izz>0.001</izz></inertia>
+        <mass>0.1</mass>
+      </inertial>
+      <visual name="lidar_visual">
+        <geometry><cylinder><radius>0.035</radius><length>0.025</length></cylinder></geometry>
+        <material><ambient>0.1 0.1 0.1 1.0</ambient></material>
+      </visual>
+      <sensor name="sweeper_lidar" type="ray">
+        <pose>0 0 0.25 0 0 0</pose>
+        <always_on>true</always_on>
+        <visualize>true</visualize>
+        <update_rate>20</update_rate>
+        <ray>
+          <scan>
+            <horizontal>
+              <samples>360</samples>
+              <resolution>1.0</resolution>
+              <min_angle>0.0</min_angle>
+              <max_angle>6.28</max_angle>
+            </horizontal>
+          </scan>
+          <range>
+            <min>0.12</min>
+            <max>30</max>
+            <resolution>0.015</resolution>
+          </range>
+          <noise>
+            <type>gaussian</type><mean>0.0</mean><stddev>0.01</stddev>
+          </noise>
+        </ray>
+        <plugin name="sweeper_laserscan" filename="libgazebo_ros_ray_sensor.so">
+          <ros><remapping>~/out:=scan</remapping></ros>
+          <output_type>sensor_msgs/LaserScan</output_type>
+          <frame_name>base_scan</frame_name>
+        </plugin>
+      </sensor>
+    </link>
+
+    <!-- 左轮 -->
+    <link name="wheel_left_link">
+      <inertial>
+        <pose>0 0.10 -0.035 -1.5708 0 0</pose>
+        <inertia><ixx>0.0001</ixx><ixy>0</ixy><ixz>0</ixz><iyy>0.0001</iyy><iyz>0</iyz><izz>0.0001</izz></inertia>
+        <mass>0.05</mass>
+      </inertial>
+      <collision name="wheel_left_collision">
+        <pose>0 0.10 -0.035 -1.5708 0 0</pose>
+        <geometry><cylinder><radius>0.03</radius><length>0.02</length></cylinder></geometry>
+        <surface>
+          <friction>
+            <ode><mu>100000.0</mu><mu2>100000.0</mu2></ode>
+          </friction>
+          <contact>
+            <ode><soft_cfm>0</soft_cfm><soft_erp>0.2</soft_erp><kp>1e5</kp><kd>1</kd></ode>
+          </contact>
+        </surface>
+      </collision>
+      <visual name="wheel_left_visual">
+        <pose>0 0.10 -0.035 -1.5708 0 0</pose>
+        <geometry><cylinder><radius>0.03</radius><length>0.02</length></cylinder></geometry>
+        <material><ambient>0.15 0.15 0.15 1.0</ambient></material>
+      </visual>
+    </link>
+
+    <!-- 右轮 -->
+    <link name="wheel_right_link">
+      <inertial>
+        <pose>0 -0.10 -0.035 -1.5708 0 0</pose>
+        <inertia><ixx>0.0001</ixx><ixy>0</ixy><ixz>0</ixz><iyy>0.0001</iyy><iyz>0</iyz><izz>0.0001</izz></inertia>
+        <mass>0.05</mass>
+      </inertial>
+      <collision name="wheel_right_collision">
+        <pose>0 -0.10 -0.035 -1.5708 0 0</pose>
+        <geometry><cylinder><radius>0.03</radius><length>0.02</length></cylinder></geometry>
+        <surface>
+          <friction>
+            <ode><mu>100000.0</mu><mu2>100000.0</mu2></ode>
+          </friction>
+          <contact>
+            <ode><soft_cfm>0</soft_cfm><soft_erp>0.2</soft_erp><kp>1e5</kp><kd>1</kd></ode>
+          </contact>
+        </surface>
+      </collision>
+      <visual name="wheel_right_visual">
+        <pose>0 -0.10 -0.035 -1.5708 0 0</pose>
+        <geometry><cylinder><radius>0.03</radius><length>0.02</length></cylinder></geometry>
+        <material><ambient>0.15 0.15 0.15 1.0</ambient></material>
+      </visual>
+    </link>
+
+    <!-- 前方万向支撑轮 -->
+    <link name="caster_link">
+      <pose>0.10 0 -0.053 0 0 0</pose>
+      <inertial><mass>0.01</mass><inertia><ixx>0.001</ixx><ixy>0</ixy><ixz>0</ixz><iyy>0.001</iyy><iyz>0</iyz><izz>0.001</izz></inertia></inertial>
+      <collision name="caster_collision">
+        <geometry><sphere><radius>0.012</radius></sphere></geometry>
+        <surface>
+          <contact><ode><soft_cfm>0</soft_cfm><soft_erp>0.2</soft_erp><kp>1e5</kp><kd>1</kd></ode></contact>
+        </surface>
+      </collision>
+    </link>
+
+    <!-- 关节 -->
+    <joint name="base_joint" type="fixed">
+      <parent>base_footprint</parent>
+      <child>base_link</child>
+      <pose>0 0 0.065 0 0 0</pose>
+    </joint>
+
+    <joint name="wheel_left_joint" type="revolute">
+      <parent>base_link</parent>
+      <child>wheel_left_link</child>
+      <pose>0 0.10 -0.035 -1.5708 0 0</pose>
+      <axis><xyz>0 0 1</xyz></axis>
+    </joint>
+
+    <joint name="wheel_right_joint" type="revolute">
+      <parent>base_link</parent>
+      <child>wheel_right_link</child>
+      <pose>0 -0.10 -0.035 -1.5708 0 0</pose>
+      <axis><xyz>0 0 1</xyz></axis>
+    </joint>
+
+    <joint name="caster_joint" type="ball">
+      <parent>base_link</parent>
+      <child>caster_link</child>
+    </joint>
+
+    <joint name="lidar_joint" type="fixed">
+      <parent>base_link</parent>
+      <child>base_scan</child>
+      <pose>0 0 0.15 0 0 0</pose>
+      <axis><xyz>0 0 1</xyz></axis>
+    </joint>
+
+    <!-- 两轮差速驱动 -->
+    <plugin name="sweeper_diff_drive" filename="libgazebo_ros_diff_drive.so">
+      <update_rate>30</update_rate>
+      <left_joint>wheel_left_joint</left_joint>
+      <right_joint>wheel_right_joint</right_joint>
+      <wheel_separation>0.20</wheel_separation>
+      <wheel_diameter>0.06</wheel_diameter>
+      <max_wheel_torque>20</max_wheel_torque>
+      <max_wheel_acceleration>1.0</max_wheel_acceleration>
+      <command_topic>cmd_vel</command_topic>
+      <publish_odom>true</publish_odom>
+      <publish_odom_tf>true</publish_odom_tf>
+      <publish_wheel_tf>false</publish_wheel_tf>
+      <odometry_topic>odom</odometry_topic>
+      <odometry_frame>odom</odometry_frame>
+      <robot_base_frame>base_footprint</robot_base_frame>
+    </plugin>
+
+    <plugin name="sweeper_joint_state" filename="libgazebo_ros_joint_state_publisher.so">
+      <ros><remapping>~/out:=joint_states</remapping></ros>
+      <update_rate>30</update_rate>
+      <joint_name>wheel_left_joint</joint_name>
+      <joint_name>wheel_right_joint</joint_name>
+    </plugin>
+  </model>
+</sdf>
